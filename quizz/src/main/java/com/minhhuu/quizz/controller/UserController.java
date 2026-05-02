@@ -28,12 +28,12 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
     @PostMapping("")
-    public ResponseEntity<UserResponse> createUser( UserRequest userRequest){
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest userRequest){
         UserResponse createdUser = userService.createUser(userRequest);
         return ResponseEntity.ok(createdUser);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, UserRequest userRequest){
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id,@RequestBody UserRequest userRequest){
         UserResponse updatedUser = userService.updateUser(id, userRequest);
         return ResponseEntity.ok(updatedUser);
     }
