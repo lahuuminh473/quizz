@@ -1,7 +1,6 @@
 package com.minhhuu.quizz.controller;
 
 import com.minhhuu.quizz.dto.*;
-import com.minhhuu.quizz.entity.QuizVariant;
 import com.minhhuu.quizz.service.quizz.IQuizService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,39 +16,40 @@ public class QuizController {
     public QuizController(IQuizService quizService) {
         this.quizService = quizService;
     }
+
     @GetMapping("")
-    public ResponseEntity<List<QuizResponse>> getAllQuiz(){
-        List<QuizResponse> quiz = quizService.getAllQuizzes();
-        return ResponseEntity.ok(quiz);
+    public ResponseEntity<List<QuizResponse>> getAllQuiz() {
+        return ResponseEntity.ok(quizService.getAllQuizzes());
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<QuizResponse> getQuizById(@PathVariable Long id){
-        QuizResponse quiz = quizService.getQuizById(id);
-        return ResponseEntity.ok(quiz);
+    public ResponseEntity<QuizResponse> getQuizById(@PathVariable Long id) {
+        return ResponseEntity.ok(quizService.getQuizById(id));
     }
+
     @PostMapping("")
-    public ResponseEntity<QuizResponse> createQuiz(QuizRequest quizRequest){
-        QuizResponse createdQuiz = quizService.createQuiz(quizRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdQuiz);
+    public ResponseEntity<QuizResponse> createQuiz(@RequestBody QuizRequest quizRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(quizService.createQuiz(quizRequest));
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<QuizResponse> updateQuiz(@PathVariable Long id, QuizRequest quizRequest){
-        QuizResponse updatedQuiz = quizService.updateQuiz(id, quizRequest);
-        return ResponseEntity.ok(updatedQuiz);
+    public ResponseEntity<QuizResponse> updateQuiz(@PathVariable Long id, @RequestBody QuizRequest quizRequest) {
+        return ResponseEntity.ok(quizService.updateQuiz(id, quizRequest));
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuiz(@PathVariable Long id){
+    public ResponseEntity<Void> deleteQuiz(@PathVariable Long id) {
         quizService.deleteQuiz(id);
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping("/playQuiz")
-    public ResponseEntity<QuizVariantResponse>playQuiz(@PathVariable Long quizId){
-        QuizVariantResponse response = quizService.playQuiz(quizId);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<QuizVariantResponse> playQuiz(@RequestParam Long quizId) {
+        return ResponseEntity.ok(quizService.playQuiz(quizId));
     }
+
     @PostMapping("/submitQuiz")
-    public ResponseEntity<QuizResult> submitQuiz(@RequestBody QuizSubmission quizSubmitRequest){
-        QuizResult result = quizService.submitQuiz(quizSubmitRequest);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<QuizResult> submitQuiz(@RequestBody QuizSubmission quizSubmitRequest) {
+        return ResponseEntity.ok(quizService.submitQuiz(quizSubmitRequest));
     }
 }

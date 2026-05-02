@@ -2,8 +2,6 @@ package com.minhhuu.quizz.controller;
 
 import com.minhhuu.quizz.dto.QuestionRequest;
 import com.minhhuu.quizz.dto.QuestionResponse;
-import com.minhhuu.quizz.dto.UserRequest;
-import com.minhhuu.quizz.dto.UserResponse;
 import com.minhhuu.quizz.service.question.IQuestionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,27 +19,27 @@ public class QuestionController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<QuestionResponse>> getAllQuestions(){
-        List<QuestionResponse> questions = questionService.getAllQuestions();
-        return ResponseEntity.ok(questions);
+    public ResponseEntity<List<QuestionResponse>> getAllQuestions() {
+        return ResponseEntity.ok(questionService.getAllQuestions());
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<QuestionResponse> getQuestionById(@PathVariable Long id){
-        QuestionResponse question = questionService.getQuestionById(id);
-        return ResponseEntity.ok(question);
+    public ResponseEntity<QuestionResponse> getQuestionById(@PathVariable Long id) {
+        return ResponseEntity.ok(questionService.getQuestionById(id));
     }
+
     @PostMapping("")
-    public ResponseEntity<QuestionResponse> createQuestion(QuestionRequest questionRequest){
-        QuestionResponse createdQuestion = questionService.createQuestion(questionRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdQuestion);
+    public ResponseEntity<QuestionResponse> createQuestion(@RequestBody QuestionRequest questionRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionService.createQuestion(questionRequest));
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<QuestionResponse> updateQuestion(@PathVariable Long id, QuestionRequest userRequest){
-        QuestionResponse updatedQuestion = questionService.updateQuestion(id, userRequest);
-        return ResponseEntity.ok(updatedQuestion);
+    public ResponseEntity<QuestionResponse> updateQuestion(@PathVariable Long id, @RequestBody QuestionRequest questionRequest) {
+        return ResponseEntity.ok(questionService.updateQuestion(id, questionRequest));
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id){
+    public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
     }
