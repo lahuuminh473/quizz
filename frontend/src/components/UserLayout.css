@@ -1,0 +1,15 @@
+.user-layout {
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.user-main {
+  padding-top: 60px; /* header height */
+  min-height: 100vh;
+}
+
+.user-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 24px;
+}

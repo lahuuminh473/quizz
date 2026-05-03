@@ -1,43 +1,60 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ToastProvider } from './context/ToastContext'
-import Navbar from './components/Navbar'
-import Dashboard from './pages/Dashboard'
-import Users from './pages/Users'
-import Categories from './pages/Categories'
-import Questions from './pages/Questions'
-import Quizzes from './pages/Quizzes'
-import Play from './pages/Play'
-import './App.css'
+import { AuthProvider } from './context/AuthContext'
 
-function Layout() {
-  return (
-    <div className="app-layout">
-      <Navbar />
-      <main className="app-main">
-        <div className="app-content">
-          <Outlet />
-        </div>
-      </main>
-    </div>
-  )
-}
+// Guards & Layouts
+import { RequireAdmin, RequireUser, RedirectIfAuth } from './components/PrivateRoute'
+import AdminLayout from './components/AdminLayout'
+import UserLayout from './components/UserLayout'
+
+// Auth pages
+import Login from './pages/Login'
+import Register from './pages/Register'
+
+// Admin pages
+import AdminDashboard from './pages/admin/AdminDashboard'
+import AdminUsers from './pages/admin/AdminUsers'
+import AdminCategories from './pages/admin/AdminCategories'
+import AdminQuestions from './pages/admin/AdminQuestions'
+import AdminQuizzes from './pages/admin/AdminQuizzes'
+
+// User pages
+import UserHome from './pages/user/UserHome'
+import UserPlay from './pages/user/UserPlay'
+import UserHistory from './pages/user/UserHistory'
+
+import './App.css'
 
 export default function App() {
   return (
     <BrowserRouter>
-      <ToastProvider>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/categories" element={<Categories />} />
-            <Route path="/questions" element={<Questions />} />
-            <Route path="/quizzes" element={<Quizzes />} />
-            <Route path="/play" element={<Play />} />
-          </Route>
-        </Routes>
-      </ToastProvider>
+      <AuthProvider>
+        <ToastProvider>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
+
+            <Route path="/login" element={<RedirectIfAuth><Login /></RedirectIfAuth>} />
+            <Route path="/register" element={<RedirectIfAuth><Register /></RedirectIfAuth>} />
+
+            <Route path="/admin" element={<RequireAdmin><AdminLayout /></RequireAdmin>}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="categories" element={<AdminCategories />} />
+              <Route path="questions" element={<AdminQuestions />} />
+              <Route path="quizzes" element={<AdminQuizzes />} />
+            </Route>
+
+            <Route path="/user" element={<RequireUser><UserLayout /></RequireUser>}>
+              <Route index element={<UserHome />} />
+              <Route path="play" element={<UserPlay />} />
+              <Route path="history" element={<UserHistory />} />
+            </Route>
+
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        </ToastProvider>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

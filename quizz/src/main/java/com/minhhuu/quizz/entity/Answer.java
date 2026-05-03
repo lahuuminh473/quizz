@@ -10,9 +10,15 @@ public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String text;
+
+    @Column(columnDefinition = "TEXT")
+    private String imageUrl;
+
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
+
     private Boolean isCorrect;
 }

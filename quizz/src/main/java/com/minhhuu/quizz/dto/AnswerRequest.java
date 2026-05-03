@@ -6,4 +6,5 @@ import lombok.Data;
 public class AnswerRequest {
     private Boolean isCorrect;
     private String text;
+    private String imageUrl;
 }

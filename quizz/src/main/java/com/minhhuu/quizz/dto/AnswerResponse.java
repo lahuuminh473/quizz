@@ -6,4 +6,5 @@ import lombok.Data;
 public class AnswerResponse {
     private Long id;
     private String text;
+    private String imageUrl;
 }

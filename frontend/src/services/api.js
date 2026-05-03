@@ -5,13 +5,32 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' }
 })
 
+api.interceptors.request.use(config => {
+  const stored = localStorage.getItem('quiz_auth')
+  if (stored) {
+    const { token } = JSON.parse(stored)
+    if (token) config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
 api.interceptors.response.use(
   res => res,
   err => {
     const msg = err.response?.data?.message || err.response?.data?.data || 'Đã xảy ra lỗi'
+    if (err.response?.status === 401) {
+      localStorage.removeItem('quiz_auth')
+      window.location.href = '/login'
+    }
     return Promise.reject(new Error(msg))
   }
 )
+
+// Auth
+export const authAPI = {
+  login: (data) => api.post('/auth/login', data),
+  register: (data) => api.post('/auth/register', data),
+}
 
 // Users
 export const userAPI = {
@@ -55,4 +74,10 @@ export const quizAPI = {
 export const quizVariantAPI = {
   getByQuizId: (quizId) => api.get(`/quiz-variants?quizId=${quizId}`),
   create: (data) => api.post('/quiz-variants', data)
+}
+
+// History
+export const historyAPI = {
+  getUserHistory: (userId) => api.get(`/history/user/${userId}`),
+  getAttemptDetail: (attemptId) => api.get(`/history/attempt/${attemptId}`)
 }

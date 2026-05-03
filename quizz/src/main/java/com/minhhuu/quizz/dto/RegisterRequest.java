@@ -1,13 +1,11 @@
 package com.minhhuu.quizz.dto;
 
-import com.minhhuu.quizz.entity.Role;
 import lombok.Data;
 
 @Data
-public class UserResponse {
-    private Long id;
+public class RegisterRequest {
     private String username;
     private String email;
+    private String password;
     private String address;
-    private Role role;
 }
